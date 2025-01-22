@@ -6,7 +6,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### Users Collection
 
-```
+``` json
 {
   "_id": { "$oid": "678e6ac8ba2404dd3d61fe7e" },
   "index": 0,
@@ -32,7 +32,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### Authors Collection
 
-```
+```json
 {
   "_id": 100,
   "name": "F. Scott Fitzgerald",
@@ -42,7 +42,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### Books Collection
 
-```
+```json
 {
   "_id": 1,
   "title": "The Great Gatsby",
@@ -55,7 +55,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 1. How Many Active Users Are There?
 
-```
+```json
 [
   { "$match": { "isActive": true } },
   { "$count": "activeUsers" }
@@ -73,7 +73,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 2. Average Age of Users
 
-```
+```json
 [
   { "$group": { "_id": null, "avgAge": { "$avg": "$age" } } }
 ]
@@ -88,7 +88,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 3. Average Age of Males and Females
 
-```
+```json
 [
   { "$group": { "_id": "$gender", "avgAge": { "$avg": "$age" } } }
 ]
@@ -103,7 +103,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 4. Top 5 Most Common Fruits
 
-```
+```json
 [
   { "$group": { "_id": "$favoriteFruit", "users": { "$sum": 1 } } },
   { "$sort": { "users": -1 } },
@@ -124,7 +124,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 5. Total Number of Males and Females
 
-```
+```json
 [
   { "$group": { "_id": "$gender", "users": { "$sum": 1 } } }
 ]
@@ -139,7 +139,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 6. Country with the Most Registered Users
 
-```
+```json
 [
   { "$group": { "_id": "$company.location.country", "users": { "$sum": 1 } } },
   { "$sort": { "users": -1 } },
@@ -160,7 +160,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 7. List All Unique Eye Colors and Their Count
 
-```
+```json
 [
   { "$group": { "_id": "$eyeColor" } },
   { "$count": "uniqueEyeColors" }
@@ -180,7 +180,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 #### Using `$unwind`:
 
-```
+```json
 [
   { "$unwind": "$tags" },
   { "$group": { "_id": "$_id", "numberOfTags": { "$sum": 1 } } },
@@ -217,7 +217,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 #### Users with the Tag `enim`:
 
-```
+```json
 [
   { "$match": { "tags": "enim" } },
   { "$count": "NumberOfUsers" }
@@ -251,7 +251,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 10. Users with Phone Numbers Starting with "+1 (940)"
 
-```
+```json
 [
   { "$match": { "company.phone": { "$regex": "^\\+1 \\\(940\\)" } } },
   { "$count": "numberOfUsers" }
@@ -269,7 +269,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 11. User Registered Most Recently
 
-```
+```json
 [
   { "$sort": { "registered": -1 } },
   { "$limit": 1 }
@@ -287,7 +287,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 12. Categorize Users by Favorite Fruit
 
-```
+```json
 [
   { "$group": { "_id": "$favoriteFruit", "users": { "$push": "$name" } } },
   { "$addFields": { "numberOfUsers": { "$size": "$users" } } },
@@ -308,7 +308,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 13. Users with "ad" as Their Second Tag
 
-```
+```json
 [
   { "$match": { "tags.1": "ad" } },
   { "$count": "numberOfUsers" }
@@ -326,7 +326,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 14. Users with Both "enim" and "id" Tags
 
-```
+```json
 [
   { "$match": { "tags": { "$all": ["enim", "id"] } } }
 ]
@@ -341,7 +341,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 15. Companies Located in the USA and Their Counts
 
-```
+```json
 [
   { "$match": { "company.location.country": "USA" } },
   { "$group": { "_id": "$company.title", "NumberOfCompanies": { "$sum": 1 } } }
@@ -361,7 +361,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 #### Scenario 1: One Author per Book
 
-```
+```json
 [
   { "$match": { "genre": "Dystopian" } },
   { "$lookup": { "from": "authors", "localField": "author_id", "foreignField": "_id", "as": "author" } },
@@ -381,7 +381,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 - `$project`: Outputs only the author’s name and birth year.
 #### Scenario 2: Multiple Authors per Book
 
-```
+```json
 [
   {
     "$match": {
@@ -430,7 +430,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 17. Books Grouped by Genre with Total Count per Genre
 
-```
+```json
 [
   {
     "$group": {
@@ -459,7 +459,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 18. Books Written by Authors Born Before 1900
 
-```
+```json
 [
   {
     "$lookup": {
@@ -504,7 +504,7 @@ MongoDB aggregation pipelines provide a robust and versatile way to work with yo
 
 ### 19. Total Books Written by Each Author
 
-```
+```json
 [
   {
     "$group": {
